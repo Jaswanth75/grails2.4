@@ -7,6 +7,10 @@ class RestServicesController extends RestfulController{
 	static responseFormats = ['json']
     def index() { }
 	
+	/**
+	 * Updates user's firstname
+	 * token is passed as parameter
+	 */
 	def updateUserFirstName = {
 		def result = new HashMap()
 		if(params.token != null && params.token != ""){
@@ -41,6 +45,10 @@ class RestServicesController extends RestfulController{
 		render result as JSON
 	}
 	
+	/**
+	 * Updates user's last name
+	 * token is passed as parameter
+	 */
 	def updateUserLastName = {
 		
 		def result = new HashMap()

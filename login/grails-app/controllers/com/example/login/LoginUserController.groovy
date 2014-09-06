@@ -1,8 +1,15 @@
 package com.example.login
 
+import grails.converters.JSON
+
 class LoginUserController {
     static responseFormats = ['json']
 	
+	/**
+	 * DIsplay the login page
+	 * 
+	 * If user already logged-in shows the corresponding message
+	 */
 	def login = {
 		
 		if(session.getAttribute("user") != null){
@@ -11,11 +18,11 @@ class LoginUserController {
 	}
 	
 	
+	/**
+	 * Authenticates the credentials, generates a token per user and redirects correspondingly
+	 */
 	def authenticate = {
-		println "params:"+params
 		def user = User.findByUsernameAndPassword(params.login,params.password)
-		
-		
 		if(user){
 			if(session.getAttribute("user") == null){
 				def authToken = new AuthenticationToken()
@@ -31,14 +38,26 @@ class LoginUserController {
 		}
 	  }
 	
-	  
+	  /**
+	   * Logs out based on the token value
+	   */
 	  def logout = {
-		  def user = session.getAttribute("user")
-		  if(user != null){
-			  def authToken = AuthenticationToken.findByUsername(user.username)
-			  authToken.delete(flush:true)
+		  def result = new HashMap()
+		  def token = params.token
+		  if(token != null && token != ""){
+			  def authToken = AuthenticationToken.findByTokenValue(token)
+			  if(authToken != null){
+				  authToken.delete(flush:true)
+				  result.put("message", "User logged out successfully");
+			  }
+			  else{
+				  result.put("message", "Invalid token value");
+			  }
+		  }
+		  else{
+			  result.put("message", "Please pass token value");
 		  }
 		  session.setAttribute("user",null);
-		  redirect(action:"login")
+		  render result as JSON
 	  }
 }

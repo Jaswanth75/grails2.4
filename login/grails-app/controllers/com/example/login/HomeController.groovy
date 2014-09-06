@@ -5,6 +5,10 @@ import grails.rest.RestfulController;
 
 class HomeController {
 
+	/**
+	 * 
+	 * Called when user tries to login without logging out
+	 */
     def index() { 
 		def map = new HashMap();
 		map.put("message", "User already logged in")
@@ -16,6 +20,9 @@ class HomeController {
 		
 	}
 	
+	/**
+	 * Displays message for authenticated user
+	 */
 	def authenticatedUser = {
 		def map = new HashMap();
 		map.put("message", "Login Successful")
@@ -28,7 +35,9 @@ class HomeController {
 		
 	}
 	
-	
+	/**
+	 * Displays message for invali user
+	 */
 	def invalidUser = {
 		def map = new HashMap();
 		map.put("message", "Access Denied")
